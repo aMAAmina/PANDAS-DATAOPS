@@ -1,0 +1,4 @@
+shein-data
+.venv
+__pycache__/
+*.pyc
