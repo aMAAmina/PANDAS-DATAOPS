@@ -20,7 +20,6 @@ while retries < max_retries:
         file_path = f"shein-data/raw/products_raw_{timestamp}.csv"
         with open(file_path, "wb") as f:
             f.write(response.content)
-
         # Load the CSV file using pandas
         products_df = pd.read_csv(file_path, encoding="ISO-8859-1")
         # Rename columns to lowercase with underscore
