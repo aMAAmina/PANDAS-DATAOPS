@@ -1,12 +1,9 @@
 import pandas as pd 
-import os
-from utils import data_helper
+from utils import os_utils
 
-# Get the absolute path to the "shein-data/raw" directory
-# Directory of the current script
-base_dir = os.path.dirname(os.path.abspath(__file__))  
-raw_data_dir = os.path.join(base_dir, "../Day2/shein-data/raw")  
-data_raw_path = data_helper.get_latest_file(raw_data_dir,"/products_raw_*.csv")
+# Get the absolute path to the "shein-data/raw" directory 
+raw_data_dir = os_utils.abs_ff_path("../data/shein-data/raw")
+data_raw_path = os_utils.get_latest_file(raw_data_dir,"/products_raw_*.csv")
 
 products_df = pd.read_csv(data_raw_path)
 products_df.info()
