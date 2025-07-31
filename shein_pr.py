@@ -22,6 +22,16 @@ while retries < max_retries:
             f.write(response.content)
         # Load the CSV file using pandas
         products_df = pd.read_csv(file_path, encoding="ISO-8859-1")
+        # inspect data prior processing
+        lines = [
+            "Data loaded successfully:",
+            f"number of rows is {len(products_df)}",
+            f"number of columns is {len(products_df.columns)}",
+            f"memory usage is {products_df.memory_usage(deep=True).sum()} bytes"
+        ]
+        for line in lines:
+            print(line)
+        print(products_df.head())
         # Rename columns to lowercase with underscore
         products_df.columns = products_df.columns.str.lower().str.replace(" ", "_")
         # Drop any rows with null product names or prices
@@ -35,15 +45,6 @@ while retries < max_retries:
         os.makedirs("shein-data/processed", exist_ok=True)
         file_pathf = f"shein-data/processed/products_cl_{timestamp}.parquet"
         products_df.to_parquet(file_pathf, index=False)
-        lines = [
-            "Data loaded successfully:",
-            f"number of rows is {len(products_df)}",
-            f"number of columns is {len(products_df.columns)}",
-            f"memory usage is {products_df.memory_usage(deep=True).sum()} bytes"
-        ]
-        for line in lines:
-            print(line)
-        print(products_df.head())
         success = True
         break
 
