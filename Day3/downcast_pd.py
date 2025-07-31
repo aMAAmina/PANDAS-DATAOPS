@@ -24,7 +24,8 @@ df['price'] = pd.to_numeric(df['price'], downcast='float')
 # Convert city to a category
 df['city'] = df['city'].astype('category')
 """
-data_helper.downcast_df(df)
+df, memory_saved = data_helper.downcast_df(df)
+print(f"Memory saved by downcasting: {memory_saved:.2f} MB")
 # Convert is_active to a bool
 df['is_active'] = df['is_active'].astype('bool')
 memory_df = df.memory_usage(deep=True).sum()/1024**2

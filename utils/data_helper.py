@@ -10,6 +10,7 @@ def get_latest_file(files_folder, files_name):
     return max(files, key=os.path.getctime)
 
 def downcast_df(df):
+    memory_df = df.memory_usage(deep=True).sum()/1024**2
     numeric_col = df.select_dtypes(include=['number']).columns  
     object_col = df.select_dtypes(include=['object']).columns 
     for col in numeric_col:
@@ -23,4 +24,5 @@ def downcast_df(df):
         if df[col].nunique() / len(df) < 0.5:
             df[col] = df[col].astype('category')
 
-    return df
+    memory_saved = memory_df - df.memory_usage(deep=True).sum()/1024**2
+    return df, memory_saved
