@@ -1,14 +1,14 @@
 import pandas as pd
 import glob
 import os
+from utils import data_helper
 
-def get_latest_raw_file():
-    files = glob.glob("shein-data/raw/products_raw_*.csv")
-    if not files:
-        raise FileNotFoundError("No raw products data files found in shein-data/raw/")
-    return max(files, key=os.path.getctime)
+# Get the absolute path to the "shein-data/raw" directory
+# Directory of the current script
+base_dir = os.path.dirname(os.path.abspath(__file__))  
+raw_data_dir = os.path.join(base_dir, "shein-data/raw")  
 
-raw_path = get_latest_raw_file()
+raw_path = data_helper.get_latest_file(raw_data_dir, "/products_raw_*.csv")
 products_df = pd.read_csv(raw_path, encoding="ISO-8859-1")
 
 # Data inspection
