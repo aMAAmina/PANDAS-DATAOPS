@@ -9,5 +9,5 @@
     (Chunked reading means loading a file in smaller portions (chunks) instead of all at once.
     In pandas it returns an iterator that yields DataFrames of specified chunk size.
     This is useful for large files that cannot fit into memory all at once.)
-- Apply lazy evaluation techniques for big data
+- [explore_dask.py](explore_dask.py)Apply lazy evaluation techniques for big data
 - Build scalable data ingestion pipelines for preprocessing
