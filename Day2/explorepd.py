@@ -7,3 +7,5 @@ users = {
 }
 
 df = pd.DataFrame(users)
+
+print(df)
