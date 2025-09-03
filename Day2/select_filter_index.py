@@ -40,11 +40,35 @@ products_df = pd.read_csv(
     })
 
 # Data inspection
-print(products_df.head(10))
+print(products_df.head())
 print(products_df.tail())
+print(f"The data contains :{len(products_df)}")
+#'color' is missing 63 values, 'offers', 'related_products', 'top_reviews' are missing 1000 values (100%)
+print(f"Nulls: {products_df.isnull().sum()}")
+products_df.drop(columns=["offers", "top_reviews", "related_products"], inplace=True)
+print("Columns 'offers', 'related_products', 'top_reviews' dropped.")
 
 # Columns of data
 print("Column names:", products_df.columns)
+
+# Drop duplicate products by product_id, keep the first occurrence
+products_df.drop_duplicates(subset=["product_id"], inplace=True)
+products_df.reset_index(drop=True, inplace=True)
+print("Duplicates dropped and index reset.")
+#sort by final_price
+products_df = products_df.sort_values(by="final_price", ascending=False)
+print("After sorting:")
+print(products_df[["product_name","final_price"]].head())
+
+#drop duplicates
+Pd_len = len(products_df)
+print(f"Prior dropping df conatins : {len(products_df)} rows")
+products_df.drop_duplicates(subset=["model_number"], keep="last", inplace=True)
+Ad_len = len(products_df)
+if Pd_len - Ad_len > 0:
+    print(f"Dropped : {Pd_len - Ad_len} rows")
+else:
+    print("No duplicates found.")
 
 # Checks if there is an electronics category in the column 'category'
 print("Contains 'electronics':", "electronics" in products_df["category"].str.lower().unique())
