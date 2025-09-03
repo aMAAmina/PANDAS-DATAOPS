@@ -5,12 +5,47 @@ from utils import os_utils
 raw_data_dir = os_utils.abs_ff_path("../data/shein-data/raw")
 
 raw_path = os_utils.get_latest_file(raw_data_dir, "/products_raw_*.csv")
-products_df = pd.read_csv(raw_path, encoding="ISO-8859-1")
+products_df = pd.read_csv(
+    raw_path, 
+    encoding="ISO-8859-1",
+    dtype={
+        "initial_price":"float32",
+        "final_price":"float32",
+        "product_name":"string",
+        "description":"string", 
+        "currency":"string",
+        "in_stock":"bool",
+        "color":"string",
+        "size":"string",
+        "reviews_count":"int32",
+        "main_image":"string",
+        "category_url":"category",
+        "url":"string",
+        "category_tree":"string",
+        "country_code":"string",
+        "domain":"string",
+        "image_count":"int32",
+        "image_urls":"string", 
+        "model_number":"string", 
+        "offers":"string",
+        "other_attributes":"string",
+        "product_id":"string",
+        "rating":"int32",
+        "related_products":"string", 
+        "root_category":"category",
+        "top_reviews":"string",
+        "category":"category", 
+        "brand":"category", 
+        "all_available_sizes":"string"
+    })
 
 # Data inspection
 print(products_df.head(10))
+print(products_df.tail())
+
 # Columns of data
 print("Column names:", products_df.columns)
+
 # Checks if there is an electronics category in the column 'category'
 print("Contains 'electronics':", "electronics" in products_df["category"].str.lower().unique())
 
@@ -36,6 +71,7 @@ if not laptops_df.empty:
 
 # Search 'electronis' across all columns
 electronics_rows = products_df.apply(lambda col: col.astype(str).str.contains("electronics", case=False, na=False)).any(axis=1)
+
 # 'category' column for matching electronic_rows
 category_electronics = products_df.loc[electronics_rows, "category"].unique()
 price_electronics = products_df.loc[electronics_rows, "initial_price"]
@@ -48,18 +84,19 @@ for cat in category_electronics:
     root_cats = cat_rows["root_category"].unique()
     print(f"Category: {cat} -> Root categories: {root_cats}")
 
-
-# Extract all rows where the category matches electronics and the price is in the range
+print("Extract all rows where the category matches electronics and the price is in the range")
 products_df = products_df[
     (products_df["category"].str.lower().isin(category_electronics)) & 
     (products_df["initial_price"] > 10) & 
     (products_df["initial_price"] < 2000)
 ]
+print(products_df)
 
-# Debug: Show laptops before rating filter
+#Empty DataFrame
+print("Debug: Show laptops before rating filter")
 laptops_all = products_df[products_df["category"].str.lower() == "laptops"]
-print("All laptops after electronics+price filter:")
 print(laptops_all.head())
+
 print("Laptops rating stats:")
 if "rating" in laptops_all.columns:
     print(laptops_all["rating"].describe())
@@ -71,7 +108,7 @@ print(products_df[products_df["category"].str.lower() == "laptops"].shape)
 print(products_df[products_df["category"].str.lower() == "laptops"].head())
 print(products_df.columns)
 
-#Filter for all products in "Laptops" with a rating above 4.5 and initial_price below $1000
+print("Filter for all products in (Laptops) with a rating above 4.5 and initial_price below $1000")
 laptops_df = products_df[
     (products_df["category"].str.lower() == "laptops") &
     (products_df["rating"] >= 4.5) &
